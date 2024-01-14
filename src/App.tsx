@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Tilt } from 'react-tilt'
 import './styles/main.css'
+import { SkeletonLoading } from './components/SkeletonLoading'
 
 const gradients = {
   blueFlame: {
@@ -33,6 +34,15 @@ const defaultOptions = {
 
 function App() {
   const [gradient, setGradient] = useState<Gradients>('blueFlame')
+  const [isLoading, setIsLoading] = useState(true)
+
+  setTimeout(() => {
+    setIsLoading(false)
+  }, 2000)
+
+  useEffect(() => {
+    setIsLoading(true)
+  }, [gradient])
 
   const { bg, color } = gradients[gradient]
 
@@ -57,18 +67,21 @@ function App() {
         options={defaultOptions}
         className="flex h-[640px] w-[640px] items-center justify-center rounded-2xl border border-opacity-30 bg-white bg-opacity-10 "
       >
-        <textarea
-          className={`${color} h-full w-full border-none bg-transparent outline-none focus:outline-none`}
-        >
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. At corrupti
-          modi itaque. Expedita fugiat deserunt accusantium. Deserunt, magnam
-          fugiat. Vitae quibusdam sed dolore est dignissimos maiores quod vel
-          suscipit perspiciatis.
-        </textarea>
+        {isLoading ? (
+          <SkeletonLoading />
+        ) : (
+          <textarea
+            className={`${color} h-full w-full border-none bg-transparent outline-none focus:outline-none`}
+          >
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+            corrupti modi itaque. Expedita fugiat deserunt accusantium.
+            Deserunt, magnam fugiat. Vitae quibusdam sed dolore est dignissimos
+            maiores quod vel suscipit perspiciatis.
+          </textarea>
+        )}
       </Tilt>
     </main>
   )
 }
-// ontainer h-96 w-96 bg-white bg-opacity-10 rounded-2xl shadow-5xl relative z-2 border border-opacity-30 border-r-0 border-b-0 backdrop-filter backdrop-blur-sm
 
 export default App
